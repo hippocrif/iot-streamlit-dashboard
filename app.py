@@ -8,6 +8,7 @@ MQTT_PORT = 1883
 
 st.set_page_config(page_title="Smart Cage Dashboard", page_icon="🐔", layout="wide")
 
+# Inisialisasi Koneksi MQTT
 @st.cache_resource
 def get_mqtt_client():
     try:
@@ -24,6 +25,7 @@ def get_mqtt_client():
         'kategori': '--'
     }
 
+    # Subscribe ke Topik MQTT
     def on_connect(client, userdata, flags, rc, *args):
         if rc == 0:
             client.subscribe("monitoring/suhu")
@@ -33,6 +35,7 @@ def get_mqtt_client():
             client.subscribe("monitoring/jam")
             client.subscribe("monitoring/kategori")
 
+    # Callback saat pesan diterima
     def on_message(client, userdata, msg):
         topic = msg.topic
         try:
@@ -90,14 +93,14 @@ with st.sidebar:
             publish_command("control/kategori", "1")
             if mqtt_client: mqtt_client.mqtt_data['kategori'] = "1"
             st.rerun()
-        if st.button("Kategori 3", use_container_width=True, type="primary" if active_kategori == "3" else "secondary"):
-            publish_command("control/kategori", "3")
-            if mqtt_client: mqtt_client.mqtt_data['kategori'] = "3"
-            st.rerun()
-    with col2:
         if st.button("Kategori 2", use_container_width=True, type="primary" if active_kategori == "2" else "secondary"):
             publish_command("control/kategori", "2")
             if mqtt_client: mqtt_client.mqtt_data['kategori'] = "2"
+            st.rerun()
+    with col2:
+        if st.button("Kategori 3", use_container_width=True, type="primary" if active_kategori == "3" else "secondary"):
+            publish_command("control/kategori", "3")
+            if mqtt_client: mqtt_client.mqtt_data['kategori'] = "3"
             st.rerun()
         if st.button("Kategori 4", use_container_width=True, type="primary" if active_kategori == "4" else "secondary"):
             publish_command("control/kategori", "4")
@@ -146,7 +149,7 @@ def display_monitoring():
         elif k == 2: min_t, max_t = 28, 32
         elif k == 3: min_t, max_t = 25, 29
         elif k == 4: min_t, max_t = 21, 25
-        else: min_t, max_t = 0, 100 # default fallback
+        else: min_t, max_t = 0, 100
         
         if s > max_t: status_suhu = "🔴 Panas"
         elif s < min_t: status_suhu = "🟡 Dingin"
@@ -154,7 +157,7 @@ def display_monitoring():
     except ValueError:
         pass
 
-    st.markdown(f"### 🕒 Waktu Perangkat: `{jam}` &nbsp;|&nbsp; 🏷️ Kategori: `{kategori}` &nbsp;|&nbsp; 🌡️ Status Suhu: `{status_suhu}`")
+    st.markdown(f"### 🕒 Waktu: `{jam}`\n### 🏷️ Kategori: `{kategori}`\n### 🌡️ Status Suhu: `{status_suhu}`")
 display_monitoring()
 
 st.divider()
