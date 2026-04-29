@@ -4,7 +4,7 @@
 #include <ESP32Servo.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-#include <PubSubClient.h> // Tambahan Library MQTT
+#include <PubSubClient.h>
 
 // ===== DEFINE PIN =====
 #define PIN_DHT       4
@@ -27,7 +27,7 @@ const char* WIFI_SSID = "Kaum Rebahan";
 const char* WIFI_PASS = "kepobgtdah";
 
 // ===== KONFIGURASI MQTT =====
-const char* mqtt_server = "broker.hivemq.com"; // Bisa diganti sesuai broker yang dipakai
+const char* mqtt_server = "broker.hivemq.com";
 const int mqtt_port = 1883;
 
 const char* NTP_SERVER = "pool.ntp.org";
@@ -368,13 +368,12 @@ void loop() {
     if (!lcdMode) {
       // Tampilkan Suhu & Kelembapan
       lcd.print("T:");
-      lcd.print((int)suhu);
+      lcd.print(suhu, 1);
       lcd.print((char)223);
       lcd.print("C ");
-
       lcd.print("H:");
-      lcd.print((int)kelembapan);
-      lcd.print("%   ");
+      lcd.print(kelembapan, 1);
+      lcd.print("%");
     } 
     else {
       // Tampilkan Jam Realtime
@@ -398,13 +397,13 @@ void loop() {
     if (!lcdMode) {
       // Mode Suhu: Status suhu + Mode relay
       if (suhu < minTemp) {
-        lcd.print("Dingin ");
+        lcd.print("Dingin   ");
       } else if (suhu > maxTemp) {
-        lcd.print("Panas  ");
+        lcd.print("Panas    ");
       } else {
-        lcd.print("Ideal  ");
+        lcd.print("Ideal    ");
       }
-      lcd.print(relayModeManual ? "Man" : "Auto");
+      lcd.print(relayModeManual ? "(Man)" : "(Auto)");
     } 
     else {
       // Mode Jam: Jadwal feeding berikutnya
@@ -459,13 +458,13 @@ void loop() {
     Serial.print("Waktu: ");
     Serial.println(waktuStr);
 
-    Serial.print(" | Temp: ");
-    Serial.print((int)suhu);
-    Serial.print("°C | Hum: ");
-    Serial.print((int)kelembapan);
-    Serial.print("% (");
+    Serial.print("Temp: ");
+    Serial.print(suhu, 2);
+    Serial.print("°C (");
     Serial.print(statusSuhu);
-    Serial.println(")");
+    Serial.print(") | Hum: ");
+    Serial.print(kelembapan, 2);
+    Serial.println("%");
 
     // ===== RELAY (SAAT BERUBAH) =====
     if (relayState != lastRelayState || relayModeManual != lastRelayMode) {
