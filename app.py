@@ -8,6 +8,23 @@ MQTT_PORT = 1883
 
 st.set_page_config(page_title="Smart Cage Dashboard", page_icon="🐔", layout="wide")
 
+# Tampilan tabel pada mobile
+st.markdown("""
+<style>
+table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+}
+th, td {
+    border: 1px solid rgba(128, 128, 128, 0.6) !important;
+    padding: 8px !important;
+}
+th {
+    background-color: rgba(128, 128, 128, 0.1) !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # Inisialisasi Koneksi MQTT
 @st.cache_resource
 def get_mqtt_client():
