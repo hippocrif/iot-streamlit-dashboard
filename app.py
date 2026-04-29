@@ -157,6 +157,8 @@ def display_monitoring():
     except ValueError:
         pass
 
+st.divider()
+
     st.markdown(f"### 🕒 Waktu: `{jam}`\n### 🏷️ Kategori: `{kategori}`\n### 🌡️ Status Suhu: `{status_suhu}`")
 display_monitoring()
 
