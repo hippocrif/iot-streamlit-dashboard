@@ -22,6 +22,22 @@ th, td {
 th {
     background-color: rgba(128, 128, 128, 0.1) !important;
 }
+
+button[kind="primary"] {
+    background-color: #0068c9 !important;
+    border-color: #0068c9 !important;
+    color: white !important;
+}
+button[kind="primary"]:hover {
+    background-color: #00509e !important;
+    border-color: #00509e !important;
+}
+button[kind="secondary"]:hover,
+button[kind="secondary"]:focus,
+button[kind="secondary"]:active {
+    border-color: #0068c9 !important;
+    color: #0068c9 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -168,15 +184,15 @@ def display_monitoring():
         elif k == 4: min_t, max_t = 21, 25
         else: min_t, max_t = 0, 100
         
-        if s > max_t: status_suhu = "🔴 Panas"
-        elif s < min_t: status_suhu = "🟡 Dingin"
-        else: status_suhu = "🟢 Ideal"
+        if s > max_t: status_suhu = "🔴 <b style='color:red'>Panas</b>"
+        elif s < min_t: status_suhu = "🟡 <b style='color:#FFD700'>Dingin</b>"
+        else: status_suhu = "🟢 <b style='color:#28a745'>Ideal</b>"
     except ValueError:
         pass
 
     st.divider()
 
-    st.markdown(f"### 🕒 Waktu: `{jam}`\n### 🏷️ Kategori: `{kategori}`\n### 🌡️ Status Suhu: `{status_suhu}`")
+    st.markdown(f"### 🕒 Waktu: `{jam}`\n### 🏷️ Kategori: `{kategori}`\n### 🌡️ Status Suhu: {status_suhu}", unsafe_allow_html=True)
 display_monitoring()
 
 st.divider()
